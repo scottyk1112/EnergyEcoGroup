@@ -17,7 +17,8 @@ ui <- pageWithSidebar(
   headerPanel('Iris k-means clustering'),
   sidebarPanel(
     selectInput('xcol', 'X Variable', names(CLUMData[,6:13])),
-    selectInput('ycol', 'Y Variable', names(CLUMData[,6:13]),
+    selectInput('ycol', 'Y Variable', names(CLUMData[,6:13])),
+    selectInput('zcol', 'Z Variable', unique(CLUMData[,5]),
                 selected=names(CLUMData)[[2]]),
     numericInput('clusters', 'Cluster count', 3,
                  min = 1, max = 9)
@@ -32,12 +33,14 @@ server <- function(input, output, session) {
   
   # Combine the selected variables into a new data frame
   selectedData <- reactive({
-    CLUMData[, c(input$xcol, input$ycol)]
+    CLUMData_subset <- subset(CLUMData, clum7_name==input$zcol)
+    CLUMData_subset[, c(input$xcol, input$ycol)]
   })
   
   clusters <- reactive({
     kmeans(selectedData(), input$clusters)
   })
+  
   
   output$plot1 <- renderPlot({
     palette(c("#E41A1C", "#377EB8", "#4DAF4A", "#984EA3",
