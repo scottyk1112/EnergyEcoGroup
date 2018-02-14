@@ -11,7 +11,8 @@ library(shiny)
 library(data.table)
 
 # Reading in the CLUM Data
-CLUMData <- read.csv("/Users/scottkaplan1112/Box Sync/Graduate School/A_DS421/Spring 2018 Project/EnergyEcoGroup_FinalProject/GFN_Data_Visualization/NFA_2017_CLUM.csv")
+#CLUMData <- read.csv("/Users/scottkaplan1112/Box Sync/Graduate School/A_DS421/Spring 2018 Project/EnergyEcoGroup_FinalProject/GFN_Data_Visualization/NFA_2017_CLUM.csv")
+CLUMData <- read.csv("../NFA_2017_CLUM.csv")
 
 # Taking logs of all of the variables for scaling
 cols <- c(names(CLUMData[,6:13]))
