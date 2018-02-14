@@ -18,6 +18,9 @@ cols <- c(names(CLUMData[,6:13]))
 CLUMData[cols] <- log(CLUMData[cols])
 setnames(CLUMData, old = c(names(CLUMData[,6:13])), new = c("Log Coicop Expenditure", "Log Crop-Land", "Log Grazing-Land", "Log Forest-Land", "Log Fishing-Ground", "Log BuiltUp-Land", "Log Carbon", "Log Total"))
 
+#CLUMData <- read.csv("/Users/scottkaplan1112/Box Sync/Graduate School/A_DS421/Spring 2018 Project/EnergyEcoGroup_FinalProject/GFN_Data_Visualization/NFA_2017_CLUM.csv")
+CLUMData <- read.csv("../NFA_2017_CLUM.csv")
+
 # Define UI for application that draws a histogram
 ui <- pageWithSidebar(
   headerPanel('Initial Visual Exploration of CLUM Data'),
