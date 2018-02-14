@@ -11,6 +11,7 @@ library(shiny)
 
 # Reading in the CLUM Data
 CLUMData <- read.csv("/Users/scottkaplan1112/Box Sync/Graduate School/A_DS421/Spring 2018 Project/EnergyEcoGroup_FinalProject/GFN_Data_Visualization/NFA_2017_CLUM.csv")
+CLUMData <- read.csv("GFN_Data_Visualization/NFA_2017_CLUM.csv")
 
 # Define UI for application that draws a histogram
 ui <- fluidPage(
