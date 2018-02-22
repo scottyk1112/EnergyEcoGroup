@@ -14,12 +14,16 @@ library(data.table)
 # Reading in the CLUM Data
 #CLUMData <- read.csv("/Users/scottkaplan1112/Box Sync/Graduate School/A_DS421/Spring 2018 Project/EnergyEcoGroup_FinalProject/GFN_Data_Visualization/NFA_2017_CLUM.csv")
 CLUMData <- read.csv("NFA_2017_CLUM.csv")
+# Path for Eli in debugging outside of Shiny
+#CLUMData <- read.csv("C:/Users/Eli/GitFolders/EnergyEcoGroup/GFN_Data_Visualization/ScatterVisuals/NFA_2017_CLUM.csv")
 
-# Taking logs of all of the variables for scaling
+
 cols <- c(names(CLUMData[,6:13]))
-CLUMData[cols] <- (CLUMData[cols])
-# Just the country and year for hover
-CLUMData_CountryYear <- CLUMData[,c("year","GTAP_name")]
+#Log transformed data
+CLUMDatalog <- CLUMData
+CLUMDatalog[cols] <- log(CLUMDatalog[cols])
+
+#Friendly names
 setnames(CLUMData, old = c(names(CLUMData[,6:13])), new = c("Coicop Expenditure", "Crop-Land", 
                                                             "Grazing-Land", "Forest-Land", "Fishing-Ground",
                                                             "BuiltUp-Land", "Carbon", "Total"))
@@ -34,7 +38,7 @@ ui <- pageWithSidebar(
     selectInput('ycol', 'Y Variable', names(CLUMData[,6:13]), selected = "Total"),
     selectInput('zcol', 'Z Variable', unique(CLUMData[,5]),
                 selected=names(CLUMData)[[2]]),
-    selectInput('scale', 'Scale', c("normal","log"), selected="normal"),
+    selectInput('scale', 'Scale', c("normal","log"), selected="log"),
     numericInput('clusters', 'Cluster count', 3,
                  min = 1, max = 9)
   ),
@@ -51,14 +55,17 @@ ui <- pageWithSidebar(
      ),
      column(width = 6, class = "well",
             h4("Zoomed from selection"),
-            plotOutput("plot2")
-     )
-    ),
+      plotOutput("plot2", hover="plot_hover2")
+                       )
+             ),
 
     fluidRow(
-     column(width = 12,
+     column(width = 6,
       h6("Hover IDs"),
-      verbatimTextOutput("info")
+      verbatimTextOutput("info")),
+     column(width = 6,
+      h6("Hover IDs Zoomed"),
+       verbatimTextOutput("info2")
       )
     )
   )
@@ -68,7 +75,12 @@ server <- function(input, output, session) {
   
   # Combine the selected variables into a new data frame
   selectedData <- reactive({
-    CLUMData_subset <- subset(CLUMData, clum7_name==input$zcol & year %in% input$Select_years)
+    CLUMData_subset <- subset(
+      #Choice option to use log transformed data
+      if(input$scale == "normal") {CLUMData}
+        else {CLUMDatalog},
+      # Fliter by choices, including years
+      clum7_name==input$zcol & year %in% input$Select_years)
     CLUMData_subset[,c(input$xcol, input$ycol)]
   })
   
@@ -86,6 +98,7 @@ server <- function(input, output, session) {
     plot(selectedData(),
          col = clusters()$cluster,
          pch = 20, cex = 3)
+    abline(a=0, b=1, h=NULL, v=NULL, col="grey")
     points(clusters()$centers, pch = 4, cex = 4, lwd = 4)
     
   })
@@ -99,7 +112,8 @@ server <- function(input, output, session) {
           ylim=c(input$plot_brush$ymin, input$plot_brush$ymax),
           col = clusters()$cluster,
           pch = 20, cex = 3)
-     points(clusters()$centers, pch = 4, cex = 4, lwd = 4)
+          abline(a=0, b=1, h=NULL, v=NULL, col="grey")
+          points(clusters()$centers, pch = 4, cex = 4, lwd = 4)
    })
 # When a double-click happens, check if there's a brush on the plot.
 # If so, zoom to the brush bounds; if not, reset the zoom.
@@ -117,7 +131,12 @@ server <- function(input, output, session) {
   
   output$info <- renderPrint({
     #It would be good to suppress the text when nothing near and suppress line number
+    # Just shows year and country. Take out of expand the column index for more data listed on the hover
      nearPoints(CLUMData, input$plot_hover, xvar = input$xcol, yvar = input$ycol, addDist = FALSE)[c(1,3)]  
+  })
+  output$info2 <- renderPrint({
+    #It would be good to suppress the text when nothing near and suppress line number
+    nearPoints(CLUMData, input$plot_hover2, xvar = input$xcol, yvar = input$ycol, addDist = FALSE)[c(1,3)]  
   })
 }
 
