@@ -133,13 +133,13 @@ server <- function(input, output, session) {
     #It would be good to suppress the text when nothing near and suppress line number
     # Just shows year and country. Take out of expand the column index for more data listed on the hover
      nearPoints(if(input$scale == "normal") {CLUMData}
-                else {CLUMDatalog},
+                else {CLUMDatalog}, 
                 input$plot_hover, xvar = input$xcol, yvar = input$ycol, threshold = 3, addDist = FALSE)[c(1,3)]  
   })
   output$info2 <- renderPrint({
     #It would be good to suppress the text when nothing near and suppress line number
     nearPoints(if(input$scale == "normal") {CLUMData}
-               else {CLUMDatalog},
+                else {CLUMDatalog},
                input$plot_hover2, xvar = input$xcol, yvar = input$ycol, threshold = 3, addDist = FALSE)[c(1,3)]  
   })
 }
