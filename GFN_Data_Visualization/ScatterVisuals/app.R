@@ -14,10 +14,12 @@ library(data.table)
 # Reading in the CLUM Data
 #CLUMData <- read.csv("/Users/scottkaplan1112/Box Sync/Graduate School/A_DS421/Spring 2018 Project/EnergyEcoGroup_FinalProject/GFN_Data_Visualization/NFA_2017_CLUM.csv")
 CLUMData <- read.csv("NFA_2017_CLUM.csv")
+CLUMQScore <- read.csv("CLUM_QScore.csv")
+CLUMData$QScore <- CLUMQScore$NFA_GTAP_Qscore[match(CLUMData$GTAP_name,CLUMQScore$GTAP.Only)]
+
 # Path for Eli in debugging outside of Shiny
-#CLUMData <- read.csv("C:/Users/Eli/GitFolders/EnergyEcoGroup/GFN_Data_Visualization/ScatterVisuals/NFA_2017_CLUM.csv")
-
-
+# CLUMData <- read.csv("C:/Users/Eli/GitFolders/EnergyEcoGroup/GFN_Data_Visualization/ScatterVisuals/NFA_2017_CLUM.csv")
+# CLUMQScore <- read.csv("C:/Users/Eli/GitFolders/EnergyEcoGroup/GFN_Data_Visualization/ScatterVisuals/CLUM_QScore.csv")
 cols <- c(names(CLUMData[,6:13]))
 #Log transformed data
 CLUMDatalog <- CLUMData
@@ -28,7 +30,7 @@ setnames(CLUMData, old = c(names(CLUMData[,6:13])), new = c("Coicop Expenditure"
                                                             "Grazing-Land", "Forest-Land", "Fishing-Ground",
                                                             "BuiltUp-Land", "Carbon", "Total"))
 
-# Define UI for application that draws a histogram
+# Define UI for application that draws a Scatterplot
 ui <- pageWithSidebar(
   headerPanel('Initial Visual Exploration of CLUM Data'),
   sidebarPanel(width = 3,
@@ -39,8 +41,8 @@ ui <- pageWithSidebar(
     selectInput('zcol', 'Z Variable', unique(CLUMData[,5]),
                 selected=names(CLUMData)[[2]]),
     selectInput('scale', 'Scale', c("normal","log"), selected="log"),
-    numericInput('clusters', 'Cluster count', 3,
-                 min = 1, max = 9)
+    numericInput('clusters', 'Minimum Quality Score', 0,
+                 min = 0, max = 6)
   ),
   mainPanel(
     fluidRow(
@@ -80,40 +82,37 @@ server <- function(input, output, session) {
       if(input$scale == "normal") {CLUMData}
         else {CLUMDatalog},
       # Fliter by choices, including years
-      clum7_name==input$zcol & year %in% input$Select_years)
+      clum7_name==input$zcol & year %in% input$Select_years & GTAP_name %in% 
+        #filter of countries with min QScore
+        subset(CLUMQScore[1], CLUMQScore[,2] %in% seq(from=input$clusters,
+                                                   to=max(CLUMQScore$NFA_GTAP_Qscore)))[,1]
+      ) 
     CLUMData_subset[,c(input$xcol, input$ycol)]
   })
-  
-  clusters <- reactive({
-    kmeans(selectedData(), input$clusters)
-  })
-  
+
   ranges <- reactiveValues(x = NULL, y = NULL)
   
   output$plot1 <- renderPlot({
-    palette(c("#E41A1C", "#377EB8", "#4DAF4A", "#984EA3",
-              "#FF7F00", "#FFFF33", "#A65628", "#F781BF", "#999999"))
-    
+    palette(c("#E41A1C",    "#984EA3",
+              "#FF7F00", "#377EB8" , "#A65628","#E41A1C",  "#4DAF4A","#999999"))
     par(mar = c(5.1, 4.1, 0, 1))
     plot(selectedData(),
-         col = clusters()$cluster,
-         pch = 20, cex = 3)
+                col = input$Select_years,
+    pch = 20, cex = 3)
     abline(a=0, b=1, h=NULL, v=NULL, col="grey")
-    points(clusters()$centers, pch = 4, cex = 4, lwd = 4)
-    
+
   })
     
    output$plot2 <- renderPlot({
-     palette(c("#E41A1C", "#377EB8", "#4DAF4A", "#984EA3",
-               "#FF7F00", "#FFFF33", "#A65628", "#F781BF", "#999999"))
-     
+     palette(c("#E41A1C",    "#984EA3",
+               "#FF7F00", "#377EB8" , "#A65628","#E41A1C",  "#4DAF4A","#999999"))
+
      par(mar = c(5.1, 4.1, 0, 1))
      plot(selectedData(), xlim=c(input$plot_brush$xmin, input$plot_brush$xmax), 
           ylim=c(input$plot_brush$ymin, input$plot_brush$ymax),
-          col = clusters()$cluster,
+          col = input$Select_years,
           pch = 20, cex = 3)
           abline(a=0, b=1, h=NULL, v=NULL, col="grey")
-          points(clusters()$centers, pch = 4, cex = 4, lwd = 4)
    })
 # When a double-click happens, check if there's a brush on the plot.
 # If so, zoom to the brush bounds; if not, reset the zoom.
@@ -134,16 +133,17 @@ server <- function(input, output, session) {
     # Just shows year and country. Take out of expand the column index for more data listed on the hover
      nearPoints(if(input$scale == "normal") {CLUMData}
                 else {CLUMDatalog}, 
-                input$plot_hover, xvar = input$xcol, yvar = input$ycol, threshold = 3, addDist = FALSE)[c(1,3)]  
+                input$plot_hover, xvar = input$xcol, yvar = input$ycol, threshold = 3, 
+                addDist = FALSE)[c("year","GTAP_name","QScore")] 
   })
   output$info2 <- renderPrint({
     #It would be good to suppress the text when nothing near and suppress line number
     nearPoints(if(input$scale == "normal") {CLUMData}
                 else {CLUMDatalog},
-               input$plot_hover2, xvar = input$xcol, yvar = input$ycol, threshold = 3, addDist = FALSE)[c(1,3)]  
+               input$plot_hover2, xvar = input$xcol, yvar = input$ycol, threshold = 3, 
+               addDist = FALSE)[c("year","GTAP_name","QScore")]  
   })
 }
 
 # Run the application 
 shinyApp(ui = ui, server = server)
-
