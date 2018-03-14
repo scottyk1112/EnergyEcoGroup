@@ -38,7 +38,7 @@ ui <- pageWithSidebar(
     checkboxGroupInput("Select_years", "Years", unique(CLUMData[,1]), selected = "2011", FALSE),
     selectInput('xcol', 'X Variable', names(CLUMData[,6:13])),
     selectInput('ycol', 'Y Variable', names(CLUMData[,6:13]), selected = "Total"),
-    selectInput('zcol', 'Z Variable', unique(CLUMData[,5]),
+    selectInput('zcol', 'CLUM Category', unique(CLUMData[,5]),
                 selected=names(CLUMData)[[2]]),
     selectInput('scale', 'Scale', c("normal","log"), selected="log"),
     numericInput('clusters', 'Minimum Quality Score', 0,
@@ -96,8 +96,9 @@ server <- function(input, output, session) {
     palette(c("#E41A1C",    "#984EA3",
               "#FF7F00", "#377EB8" , "#A65628","#E41A1C",  "#4DAF4A","#999999"))
     par(mar = c(5.1, 4.1, 0, 1))
+    Qcolors <- seq(from=input$clusters,to=6) 
     plot(selectedData(),
-                col = input$Select_years,
+                col = Qcolors, #c(0,1,2,3,4,5,6) ,
     pch = 20, cex = 3)
     abline(a=0, b=1, h=NULL, v=NULL, col="grey")
 
@@ -106,11 +107,11 @@ server <- function(input, output, session) {
    output$plot2 <- renderPlot({
      palette(c("#E41A1C",    "#984EA3",
                "#FF7F00", "#377EB8" , "#A65628","#E41A1C",  "#4DAF4A","#999999"))
-
      par(mar = c(5.1, 4.1, 0, 1))
+     Qcolors <- seq(from=input$clusters,to=6)
      plot(selectedData(), xlim=c(input$plot_brush$xmin, input$plot_brush$xmax), 
           ylim=c(input$plot_brush$ymin, input$plot_brush$ymax),
-          col = input$Select_years,
+          col = Qcolors,
           pch = 20, cex = 3)
           abline(a=0, b=1, h=NULL, v=NULL, col="grey")
    })
