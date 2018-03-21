@@ -64,7 +64,7 @@ ui <- pageWithSidebar(
     fluidRow(
      column(width = 6,
       h6("Hover IDs"),
-      verbatimTextOutput("info")),
+      verbatimTextOutput("info", placeholder = TRUE)),
      column(width = 6,
       h6("Hover IDs Zoomed"),
        verbatimTextOutput("info2")
@@ -132,17 +132,29 @@ server <- function(input, output, session) {
   output$info <- renderPrint({
     #It would be good to suppress the text when nothing near and suppress line number
     # Just shows year and country. Take out of expand the column index for more data listed on the hover
-     nearPoints(if(input$scale == "normal") {CLUMData}
+     a <- nearPoints(if(input$scale == "normal") {CLUMData}
                 else {CLUMDatalog}, 
-                input$plot_hover, xvar = input$xcol, yvar = input$ycol, threshold = 3, 
+                input$plot_hover, xvar = input$xcol, yvar = input$ycol, threshold = 3, maxpoint = 3, 
                 addDist = FALSE)[c("year","GTAP_name","QScore")] 
-  })
+    row.names(a) <- NULL
+      if (nrow(a) > 0) {
+        return(a)
+      } else {
+        cat("  year   GTAP_name  QScore")
+      }
+    })
   output$info2 <- renderPrint({
     #It would be good to suppress the text when nothing near and suppress line number
-    nearPoints(if(input$scale == "normal") {CLUMData}
+    a <- nearPoints(if(input$scale == "normal") {CLUMData}
                 else {CLUMDatalog},
-               input$plot_hover2, xvar = input$xcol, yvar = input$ycol, threshold = 3, 
-               addDist = FALSE)[c("year","GTAP_name","QScore")]  
+               input$plot_hover2, xvar = input$xcol, yvar = input$ycol, threshold = 3, maxpoint = 3, 
+               addDist = FALSE)[c("year","GTAP_name","QScore")]
+    if (nrow(a) > 0) {
+      row.names(a) <- NULL
+      return(a)
+    } else {
+      cat("  year   GTAP_name  QScore")
+    }
   })
 }
 
