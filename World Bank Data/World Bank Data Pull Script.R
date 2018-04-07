@@ -60,10 +60,35 @@ Coverage_SocialInsurance <- "per_si_allsi.cov_pop_tot"
 Coverage_SocialInsurance_LowestQuintile <- "per_si_allsi.cov_ep_tot"
 CPIA_FinancialSector <- "IQ.CPA.FINS.XQ"
   
+######Personal Transportation Section
+SchoolEnrollment_GPI <- "SE.ENR.PRSC.FM.ZS"
+UrbanRoadDensity <- "IN.TRANSPORT.URBNRD.DENSIT"
+RuralRoadDensity <- "IN.TRANSPORT.RURLRD.DENSIT"
+RuralAccessRoads <- "IS.ROD.ALLS.ZS"
+RailPassengers <- "IS.RRS.PASG.KM" #Need to normalize this by population and country size somehow
+RoadPassengers <- "IS.ROD.PSGR.K6" #Need to normalize this by population and country size somehow
+AirPassengers <- "IS.AIR.PSGR"     #Need to normalize this by population and country size somehow (& this is probably a lot of tourists!)
+DeathsInTraffic <- "H.STA.TRAF.P5"
+
+######Housing Section
+HHwithonsiteh2o <- "SG.H2O.PRMS.HH.ZS"
+H20Shortagepermo <- "IC.FRM.INFRA.IN6"
+DistOfHausByAvailOfH2o <- "IN.POV.HH.DRKNGWATER.WITHIN" # Not sure what this looks like "distribution?"
+HoursofPowerOutage <- "IC.ELC.OUTG.HR"
+PersonalToilet <- "SH.STA.SMSS.ZS"
+BldgQualityControlIndex <- "IC.DCP.BQCI"
+CookInHaus <- "SG.COK.HOUS.ZS"
+CookWithElec <- "SG.COK.ELEC.ZS"
+CookWithGas <- "SG.COK.LPGN.ZS"
 
 ##Goods Metrics (Prelminary) 
-Food_Beverages_Tobacco <- "NV.MNF.FBTO.ZS.UN"
-Textiles_Clothing <- "NV.MNF.TXTL.ZS.UN"
+# I'm tempted to use just 1 or two measures of material satisfaction and well-being
+# One of the World economists (http://blogs.worldbank.org/impactevaluations/what-is-the-good-life-can-we-measure-it) 
+# linked to http://ophi.org.uk/multidimensional-poverty-index/global-mpi-2017/mpi-data/ has asset poverty measures for many countires.
+# Food_Beverages_Tobacco <- "NV.MNF.FBTO.ZS.UN"
+# Textiles_Clothing <- "NV.MNF.TXTL.ZS.UN"
+
+
 
 
 ##Data Pull Function
