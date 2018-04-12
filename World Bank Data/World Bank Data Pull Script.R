@@ -94,8 +94,7 @@ CookWithGas <- "SG.COK.LPGN.ZS"
 ##Data Pull Function
 WB_DataPull_Function <- function(indicator_list, CLUM_startyear, CLUM_middleyear, CLUM_endyear){
   DataFrame <- WDI(country = "all",
-                   indicator = c(FoodDeficit, CerealYield, AgVAPerWorker, AgVA, FertilizerCons,
-                                 FoodProdIndex, TractorPer100SqKm, AgIrrigatedLand, FishSpeciesThreatened),
+                   indicator = indicator_list,
                    start = CLUM_startyear, end = CLUM_endyear, extra = FALSE, cache = NULL) 
   
   DataFrame <- subset(DataFrame, year == CLUM_startyear | year == CLUM_middleyear | year == CLUM_endyear)
