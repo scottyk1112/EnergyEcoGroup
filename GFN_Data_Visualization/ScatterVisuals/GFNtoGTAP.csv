@@ -1,0 +1,247 @@
+GFN_Name, NFA_Code, GTAP9_Code, GTAP_name
+Armenia,1,94,Armenia
+Afghanistan,2,26,Rest of South Asia
+Albania,3,82,Albania
+Algeria,4,111,Rest of North Africa
+American Samoa,5,3,Rest of Oceania
+Andorra,6,90,Rest of Europe
+Angola,7,123,South Central Africa
+Antigua and Barbuda,8,53,Caribbean
+Argentina,9,31,Argentina
+Australia,10,1,Australia
+Austria,11,54,Austria
+Bahamas,12,53,Caribbean
+Bahrain,13,97,Bahrain
+Barbados,14,53,Caribbean
+Bangladesh,16,21,Bangladesh
+Bermuda,17,30,Rest of North America
+Bhutan,18,26,Rest of South Asia
+Bolivia,19,32,Bolivia
+Botswana,20,136,Botswana
+Brazil,21,33,Brazil
+Aruba,22,53,Caribbean
+Belize,23,48,Rest of Central America
+British Indian Ocean Ter,24,140,Rest of the World
+Solomon Islands,25,3,Rest of Oceania
+Brunei Darussalam,26,11,Brunei Darussalam
+Bulgaria,27,83,Bulgaria
+Myanmar,28,20,Rest of Southeast Asia
+Burundi,29,135,Rest of Eastern Africa
+Cameroon,32,114,Cameroon
+Canada,33,27,Canada
+Cabo Verde,35,121,Rest of Western Africa
+Cayman Islands,36,53,Caribbean
+Central African Republic,37,122,Central Africa
+Sri Lanka,38,25,Sri Lanka
+Chad,39,122,Central Africa
+Chile,40,34,Chile
+"China, mainland",41,4,China
+Christmas Island,42,1,Australia
+Cocos (Keeling) Islands,43,1,Australia
+Colombia,44,35,Colombia
+Comoros,45,135,Rest of Eastern Africa
+Congo,46,122,Central Africa
+Cook Islands,47,3,Rest of Oceania
+Costa Rica,48,42,Costa Rica
+Cuba,49,53,Caribbean
+Cyprus,50,56,Cyprus
+Czechoslovakia,51,,
+Azerbaijan,52,95,Azerbaijan
+Benin,53,112,Benin
+Denmark,54,58,Denmark
+Dominica,55,53,Caribbean
+Dominican Republic,56,49,Dominican Republic
+Belarus,57,84,Belarus
+Ecuador,58,36,Ecuador
+Egypt,59,108,Egypt
+El Salvador,60,47,El Salvador
+Equatorial Guinea,61,122,Central Africa
+Ethiopia PDR,62,,
+Estonia,63,59,Estonia
+Faroe Islands,64,90,Rest of Europe
+Falkland Islands,65,41,Rest of South America
+Fiji,66,3,Rest of Oceania
+Finland,67,60,Finland
+France,68,61,France
+French Guiana,69,41,Rest of South America
+French Polynesia,70,3,Rest of Oceania
+Djibouti,72,135,Rest of Eastern Africa
+Georgia,73,96,Georgia
+Gabon,74,122,Central Africa
+Gambia,75,121,Rest of Western Africa
+Germany,79,62,Germany
+Bosnia and Herzegovina,80,90,Rest of Europe
+Ghana,81,116,Ghana
+Gibraltar,82,90,Rest of Europe
+Kiribati,83,3,Rest of Oceania
+Greece,84,63,Greece
+Greenland,85,30,Rest of North America
+Grenada,86,53,Caribbean
+Guadeloupe,87,61,France
+Guam,88,3,Rest of Oceania
+Guatemala,89,43,Guatemala
+Guinea,90,117,Guinea
+Guyana,91,41,Rest of South America
+Haiti,93,53,Caribbean
+Honduras,95,44,Honduras
+China Hong Kong SAR,96,5,"Hong Kong, Special Administrative Region of China"
+Hungary,97,64,Hungary
+Croatia,98,85,Croatia
+Iceland,99,81,Rest of EFTA
+India,100,22,India
+Indonesia,101,13,Indonesia
+"Iran, Islamic Republic of",102,98,Iran
+Iraq,103,107,Rest of Western Asia
+Ireland,104,65,Ireland
+Israel,105,99,Israel
+Italy,106,66,Italy
+Côte d'Ivoire,107,115,Cote dIvoire
+Kazakhstan,108,91,Kazakhstan
+Jamaica,109,50,Jamaica
+Japan,110,6,Japan
+Jordan,112,100,Jordan
+Kyrgyzstan,113,92,Kyrgyzstan
+Kenya,114,125,Kenya
+Cambodia,115,12,Cambodia
+"Korea, Democratic People's Republic of",116,10,Rest of East Asia
+"Korea, Republic of",117,7,South Korea
+Kuwait,118,101,Kuwait
+Latvia,119,67,Latvia
+Lao People's Democratic Republic,120,14,Laos
+Lebanon,121,107,Rest of Western Asia
+Lesotho,122,139,Rest of South African Customs Union
+Liberia,123,121,Rest of Western Africa
+Libyan Arab Jamahiriya,124,111,Rest of North Africa
+Liechtenstein,125,81,Rest of EFTA
+Lithuania,126,68,Lithuania
+Marshall Islands,127,3,Rest of Oceania
+"China, Macao SAR",128,10,Rest of East Asia
+Madagascar,129,126,Madagascar
+Malawi,130,127,Malawi
+Malaysia,131,15,Malaysia
+Maldives,132,26,Rest of South Asia
+Mali,133,121,Rest of Western Africa
+Malta,134,70,Malta
+Martinique,135,61,France
+Mauritania,136,121,Rest of Western Africa
+Mauritius,137,128,Mauritius
+Mexico,138,29,Mexico
+Mongolia,141,8,Mongolia
+Montserrat,142,53,Caribbean
+Morocco,143,109,Morocco
+Mozambique,144,129,Mozambique
+"Micronesia, Federated States of",145,3,Rest of Oceania
+Moldova,146,89,Rest of Eastern Europe
+Namibia,147,137,Namibia
+Nauru,148,3,Rest of Oceania
+Nepal,149,23,Nepal
+Netherlands,150,71,Netherlands
+Netherlands Antilles,151,53,Caribbean
+New Caledonia,153,3,Rest of Oceania
+Macedonia TFYR,154,90,Rest of Europe
+Vanuatu,155,3,Rest of Oceania
+New Zealand,156,2,New Zealand
+Nicaragua,157,45,Nicaragua
+Niger,158,121,Rest of Western Africa
+Nigeria,159,118,Nigeria
+Niue,160,3,Rest of Oceania
+Norfolk Island,161,1,Australia
+Norway,162,80,Norway
+Northern Mariana Islands,163,3,Rest of Oceania
+Pacific Islands Trust,164,,
+Pakistan,165,24,Pakistan
+Panama,166,46,Panama
+Czech Republic,167,57,Czech Republic
+Papua New Guinea,168,3,Rest of Oceania
+Paraguay,169,37,Paraguay
+Peru,170,38,Peru
+Philippines,171,16,Philippines
+Pitcairn,172,3,Rest of Oceania
+Poland,173,72,Poland
+Portugal,174,73,Portugal
+Guinea-Bissau,175,121,Rest of Western Africa
+Timor-Leste,176,20,Rest of Southeast Asia
+Puerto Rico,177,51,Puerto Rico
+Eritrea,178,135,Rest of Eastern Africa
+Qatar,179,103,Qatar
+Palau,180,3,Rest of Oceania
+Zimbabwe,181,134,Zimbabwe
+Réunion,182,61,France
+Romania,183,86,Romania
+Rwanda,184,130,Rwanda
+Russian Federation,185,87,Russian Federation
+Serbia and Montenegro,186,90,Rest of Europe
+Saint Helena,187,121,Rest of Western Africa
+Saint Kitts and Nevis,188,53,Caribbean
+Saint Lucia,189,53,Caribbean
+Saint Pierre and Miquelon,190,30,Rest of North America
+Saint Vincent and Grenadines,191,53,Caribbean
+Sao Tome and Principe,193,122,Central Africa
+Saudi Arabia,194,104,Saudi Arabia
+Senegal,195,119,Senegal
+Seychelles,196,135,Rest of Eastern Africa
+Sierra Leone,197,121,Rest of Western Africa
+Slovenia,198,75,Slovenia
+Slovakia,199,74,Slovakia
+Singapore,200,17,Singapore
+Somalia,201,135,Rest of Eastern Africa
+South Africa,202,138,South Africa
+Spain,203,76,Spain
+Western Sahara,205,111,Rest of North Africa
+Sudan (former),206,135,Rest of Eastern Africa
+Suriname,207,41,Rest of South America
+Tajikistan,208,93,Rest of Former Soviet Union
+Swaziland,209,139,Rest of South African Customs Union
+Sweden,210,77,Sweden
+Switzerland,211,79,Switzerland
+Syrian Arab Republic,212,107,Rest of Western Asia
+Turkmenistan,213,93,Rest of Former Soviet Union
+Taiwan,214,9,"Taiwan, Republic of China"
+"Tanzania, United Republic of",215,131,Tanzania
+Thailand,216,18,Thailand
+Togo,217,120,Togo
+Tokelau,218,3,Rest of Oceania
+Tonga,219,3,Rest of Oceania
+Trinidad and Tobago,220,52,Trinidad and Tobago
+Oman,221,102,Oman
+Tunisia,222,110,Tunisia
+Turkey,223,105,Turkey
+Turks and Caicos Islands,224,53,Caribbean
+United Arab Emirates,225,106,United Arab Emirates
+Uganda,226,132,Uganda
+Tuvalu,227,3,Rest of Oceania
+USSR,228,,
+United Kingdom,229,78,United Kingdom
+Ukraine,230,88,Ukraine
+United States of America,231,28,United States of America
+Burkina Faso,233,113,Burkina Faso
+Uruguay,234,39,Uruguay
+Uzbekistan,235,93,Rest of Former Soviet Union
+"Venezuela, Bolivarian Republic of",236,40,Venezuela (Bolivarian Republic of)
+Viet Nam,237,19,Vietnam
+Ethiopia,238,124,Ethiopia
+British Virgin Islands,239,53,Caribbean
+US Virgin Islands,240,53,Caribbean
+Wake Island,242,3,Rest of Oceania
+Wallis and Futuna Islands,243,3,Rest of Oceania
+Samoa,244,3,Rest of Oceania
+Yugoslav SFR,248,,
+Yemen,249,107,Rest of Western Asia
+"Congo, Democratic Republic of",250,123,South Central Africa
+Zambia,251,133,Zambia
+Belgium,255,55,Belgium
+Luxembourg,256,69,Luxembourg
+Anguilla,258,53,Caribbean
+Channel Islands,259,90,Rest of Europe
+Isle of Man,264,90,Rest of Europe
+Mayotte,270,135,Rest of Eastern Africa
+Serbia,272,90,Rest of Europe
+Montenegro,273,90,Rest of Europe
+Sudan,276,135,Rest of Eastern Africa
+South Sudan,277,135,Rest of Eastern Africa
+Curaçao,279,53,Caribbean
+Sint Maarten (Dutch Part),280,53,Caribbean
+Saint-Martin (French Part),281,53,Caribbean
+State of Palestine,299,107,Rest of Western Asia
+China,351,,
+World,5001,,

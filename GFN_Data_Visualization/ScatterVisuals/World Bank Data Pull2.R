@@ -105,3 +105,5 @@ WB_DataPull_Function <- function(indicator_list, CLUM_startyear, CLUM_middleyear
 
 
 TestData <- WB_DataPull_Function(IndicatorList,2011,2011,2011)
+
+write.csv(TestData,file="WorldBankData.csv")
