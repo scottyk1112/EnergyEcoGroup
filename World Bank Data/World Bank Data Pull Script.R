@@ -1,6 +1,7 @@
 library(shiny)
 library(data.table)
 library(WDI)
+library(dplyr)
 
 ###############WORLD BANK DATA PULL SCRIPT#############
 
@@ -81,17 +82,16 @@ Services_Indicators <- c(HospitalBeds, TelephoneSubscriptions, BroadbandSubscrip
 
 ######Personal Transportation Section
 SchoolEnrollment_GPI <- "SE.ENR.PRSC.FM.ZS"
-UrbanRoadDensity <- "IN.TRANSPORT.URBNRD.DENSIT"
-RuralRoadDensity <- "IN.TRANSPORT.RURLRD.DENSIT"
-RuralAccessRoads <- "IS.ROD.ALLS.ZS"
+#UrbanRoadDensity <- "IN.TRANSPORT.URBNRD.DENSIT"
+#RuralRoadDensity <- "IN.TRANSPORT.RURLRD.DENSIT"
+#RuralAccessRoads <- "IS.ROD.ALLS.ZS"
 RailPassengers <- "IS.RRS.PASG.KM" #Need to normalize this by population and country size somehow
-RailPassengers_2 <- "IS.RRS.PASG.K2.PP.ZS"
+#RailPassengers_2 <- "IS.RRS.PASG.K2.PP.ZS" #Wasn't able to download
 RoadPassengers <- "IS.ROD.PSGR.K6" #Need to normalize this by population and country size somehow
 AirPassengers <- "IS.AIR.PSGR"     #Need to normalize this by population and country size somehow (& this is probably a lot of tourists!)
-DeathsInTraffic <- "H.STA.TRAF.P5"
+#DeathsInTraffic <- "H.STA.TRAF.P5" #Wasn't able to download
 
-Transport_Indicators <- c(SchoolEnrollment_GPI, UrbanRoadDensity, RuralRoadDensity, RuralAccessRoads,
-                          RailPassengers, RailPassengers_2, RoadPassengers, AirPassengers, DeathsInTraffic)
+Transport_Indicators <- c(SchoolEnrollment_GPI, RailPassengers, RoadPassengers, AirPassengers)
 
 
 ######Housing Section
@@ -173,10 +173,12 @@ for(i in 1:ncol(colnames_important)){
 datamatrix <- as.data.frame(datamatrix)
 colnames(datamatrix) <- colnames(colnames_important)
 datamatrix$MaxMin_Index <- rowMeans(datamatrix, na.rm = TRUE)
-colnames(datamatrix)[ncol(datamatrix)] <- paste0("MaxMin_", category, "_Index")
+colnames(datamatrix)[ncol(datamatrix)] <- "MaxMin_Index"
+datamatrix$CLUM_category <- category
 
 datamatrix <- cbind(data[,c(1:3)], datamatrix)
 
+datamatrix <- datamatrix[,c(2:3,(ncol(datamatrix)-1):ncol(datamatrix))]
 return(datamatrix)
 
 }
@@ -188,17 +190,69 @@ ServicesData_MaxMin <- MaxMin_Fun(ServicesData_NoNAs, "Services")
 TransportData_MaxMin <- MaxMin_Fun(TransportData_NoNAs, "Transport")
 
 ##For Housing data, only one column and already 0 to 1
-colnames(HousingData_NoNAs) <- c("iso2c", "country", "year", "MaxMin_Housing_Index")
-HousingData_MaxMin <- HousingData_NoNAs
+colnames(HousingData_NoNAs) <- c("iso2c", "country", "year", "MaxMin_Index")
+HousingData_NoNAs$MaxMin_Index <- HousingData_NoNAs$MaxMin_Index/100
+HousingData_NoNAs$CLUM_category <- "Housing"
+HousingData_MaxMin <- HousingData_NoNAs[,c(2:5)]
 
 ##For Goods Data, just rename column
-colnames(GoodsData) <- c("GTAP9_Code", "year", "MaxMin_Goods_Index")
+colnames(GoodsData) <- c("country", "year", "MaxMin_Index")
+GoodsData$MaxMin_Index <- GoodsData$MaxMin_Index/100
+GoodsData$CLUM_category <- "Goods"
 GoodsData_MaxMin <- GoodsData
 
+##Binding Data together for single spreadsheet
+MaxMinData <- rbind(FoodData_MaxMin, GovernmentData_MaxMin, ServicesData_MaxMin, 
+                    TransportData_MaxMin, HousingData_MaxMin, GoodsData_MaxMin)
 
 
 
 
 ########Now for z-score stuff
+####Max/Min function calculation####
+ZScore_Fun <- function(data, category){
+  
+  colnames_important <- data[,-c(1:3)]
+  datamatrix <- matrix(ncol = ncol(colnames_important), nrow = nrow(data))
+  for(i in 1:ncol(colnames_important)){
+    datamatrix[,i] <- scale(data[,i+3])
+  }
+  
+  datamatrix <- as.data.frame(datamatrix)
+  colnames(datamatrix) <- colnames(colnames_important)
+  datamatrix$MaxMin_Index <- rowMeans(datamatrix, na.rm = TRUE)
+  colnames(datamatrix)[ncol(datamatrix)] <- "ZScore_Index"
+  datamatrix$CLUM_category <- category
+  
+  datamatrix <- cbind(data[,c(1:3)], datamatrix)
+  
+  datamatrix <- datamatrix[,c(2:3,(ncol(datamatrix)-1):ncol(datamatrix))]
+  return(datamatrix)
+  
+}
 
 
+FoodData_ZScore <- ZScore_Fun(FoodData_NoNAs, "Food")
+GovernmentData_ZScore <- ZScore_Fun(GovernmentData_NoNAs, "Government")
+ServicesData_ZScore <- ZScore_Fun(ServicesData_NoNAs, "Services")
+TransportData_ZScore <- ZScore_Fun(TransportData_NoNAs, "Transport")
+
+
+##For Housing data, only one column and already 0 to 1
+ZScore_Index <- scale(HousingData_NoNAs$MaxMin_Index)
+HousingData_ZScore <- cbind(HousingData_NoNAs[,c(2:3, 5)], ZScore_Index)
+
+##For Goods Data, just rename column
+ZScore_Index <- scale(GoodsData$MaxMin_Index)
+GoodsData_ZScore <- cbind(GoodsData[,c(1:2, 4)], ZScore_Index)
+
+##Binding Data together for single spreadsheet
+ZScoreData <- rbind(FoodData_ZScore, GovernmentData_ZScore, ServicesData_ZScore, 
+                    TransportData_ZScore, HousingData_ZScore, GoodsData_ZScore)
+
+
+
+##Combining MaxMin and Z-score datasets
+IndicesData <- left_join(ZScoreData, MaxMinData, by = c("country", "year", "CLUM_category"))
+
+write.csv(IndicesData, "/Users/scottkaplan1112/Box Sync/Graduate School/A_DS421/Spring 2018 Project/EnergyEcoGroup_FinalProject/World Bank Data/IndicesData.csv")
