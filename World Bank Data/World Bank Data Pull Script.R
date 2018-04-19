@@ -145,26 +145,26 @@ GoodsData <- read.csv("/Users/scottkaplan1112/Box Sync/Graduate School/A_DS421/S
 ####Indices Reversal (Manual)
 
 ##Food
-Food_Data$SN.ITK.DFCT <- Food_Data$SN.ITK.DFCT/100
-Food_Data$EN.FSH.THRD.NO <- Food_Data$EN.FSH.THRD.NO/100
+Food_Data$SN.ITK.DFCT <- 1/Food_Data$SN.ITK.DFCT
+Food_Data$EN.FSH.THRD.NO <- 1/Food_Data$EN.FSH.THRD.NO/
 
 ##Government
-Government_Data$GC.DOD.TOTL.GD.ZS <- Government_Data$GC.DOD.TOTL.GD.ZS/100
-Government_Data$BN.CAB.XOKA.GD.ZS <- Government_Data$BN.CAB.XOKA.GD.ZS/100
-Government_Data$SL.UEM.TOTL.NE.ZS <- Government_Data$SL.UEM.TOTL.NE.ZS/100
-Government_Data$DT.ODA.ODAT.KD <- Government_Data$DT.ODA.ODAT.KD/100
-Government_Data$FP.CPI.TOTL.ZG <- Government_Data$FP.CPI.TOTL.ZG/100
+Government_Data$GC.DOD.TOTL.GD.ZS <- 1/Government_Data$GC.DOD.TOTL.GD.ZS
+Government_Data$BN.CAB.XOKA.GD.ZS <- 1/Government_Data$BN.CAB.XOKA.GD.ZS
+Government_Data$SL.UEM.TOTL.NE.ZS <- 1/Government_Data$SL.UEM.TOTL.NE.ZS
+Government_Data$DT.ODA.ODAT.KD <- 1/Government_Data$DT.ODA.ODAT.KD
+Government_Data$FP.CPI.TOTL.ZG <- 1/Government_Data$FP.CPI.TOTL.ZG
 
 ##Services
-Services_Data$SE.PRE.ENRL.TC.ZS <- Services_Data$SE.PRE.ENRL.TC.ZS/100
-Services_Data$SE.PRM.ENRL.TC.ZS <- Services_Data$SE.PRM.ENRL.TC.ZS/100
+Services_Data$SE.PRE.ENRL.TC.ZS <- 1/Services_Data$SE.PRE.ENRL.TC.ZS
+Services_Data$SE.PRM.ENRL.TC.ZS <- 1/Services_Data$SE.PRM.ENRL.TC.ZS
 
 ##Transport (none)
 
 ##Housing (none)
 
-##Goods (none)
-
+##Goods
+GoodsData$ass_pov_extr <- 1/GoodsData$ass_pov_extr
 
 ##NA Removal Function
 NARemove_Fun <- function(data, NA_factor){
