@@ -142,6 +142,19 @@ Housing_Data <- WB_DataPull_Function(Housing_Indicators, 2004, 2007, 2011)
 GoodsData <- read.csv("/Users/scottkaplan1112/Box Sync/Graduate School/A_DS421/Spring 2018 Project/EnergyEcoGroup_FinalProject/World Bank Data/ass_pov_final.csv")
 
 
+
+####Dropping WB countries not used in correspondence before forming indicators
+Countries_toDrop <- read.csv("/Users/scottkaplan1112/Box Sync/Graduate School/A_DS421/Spring 2018 Project/EnergyEcoGroup_FinalProject/GFN_Data_Visualization/ScatterVisuals/DropThese.csv")
+colnames(Countries_toDrop) <- c("index", "country")
+
+Food_Data <- Food_Data[!(Food_Data$country %in% Countries_toDrop$country),]
+Government_Data <- Government_Data[!(Government_Data$country %in% Countries_toDrop$country),]
+Services_Data <- Services_Data[!(Services_Data$country %in% Countries_toDrop$country),]
+Transport_Data <- Transport_Data[!(Transport_Data$country %in% Countries_toDrop$country),]
+Housing_Data <- Housing_Data[!(Housing_Data$country %in% Countries_toDrop$country),]
+
+
+
 ####Indices Reversal (Manual)
 
 ##Food
@@ -189,6 +202,10 @@ GovernmentData_NoNAs <- NARemove_Fun(Government_Data, 2)
 ServicesData_NoNAs <- NARemove_Fun(Services_Data, 2)
 TransportData_NoNAs <- NARemove_Fun(Transport_Data, 2)
 HousingData_NoNAs <- NARemove_Fun(Housing_Data, 1.25)
+
+
+
+
 
 
 ####Max/Min function calculation####
