@@ -1,11 +1,13 @@
 library(data.table)
 library(dplyr)
-#setwd("~/GFN_Data_Visualization/")
+#setwd("./GFN_Data_Visualization/ScatterVisuals")
 #set for which years to include
-years <- 2011
+years <- c(2004,2007,2011)
 
 #read in World Bank Data
-WBData <- read.csv("WorldBankData.csv", header=TRUE, colClasses=NA)
+WBData <- read.csv("IndicesData.csv", header=TRUE, colClasses=NA)
+WBData$country <- as.character(WBData$country)
+Ass_pov <- read.csv("ass_pov_final.csv", header=TRUE, colClasses=NA)
 WBData$country <- as.character(WBData$country)
 #deal with weird symbol in country name
 WBData$country[grepl("Korea, Dem. Peopl",WBData$country)] <- "Korea, Democratic People's Republic of"
@@ -43,8 +45,9 @@ WB_drop <- c("Arab World", "East Asia & Pacific (excluding high income)",
 #filter to end up with remainders not in GFN or drop
 WB_notGFNlist <- WBData$country[!(WBData$country %in% GFNtoGTAP$GFN_Name)]
 WB_notGFNlist <- WB_notGFNlist[!(WB_notGFNlist %in% WB_drop)]
-
-#Update spellings to GFN
+#already in GTAP gropuings (from Nat)
+WB_notGFNlist <- WB_notGFNlist[!(WB_notGFNlist %in% GFNtoGTAP$GTAP_name)]
+#Update spellings to GFN, and then drop from the 'remainder' list
 wb <- "Bahamas, The"; gfn <- "Bahamas" 
 GFNtoGTAP$AltGFN1[GFNtoGTAP$GFN_Name == gfn] <- wb; WB_notGFNlist = WB_notGFNlist[WB_notGFNlist!=wb]
 wb <- "Congo, Dem. Rep."; gfn <- "Congo, Democratic Republic of" 
@@ -155,18 +158,29 @@ for (i in 1:length(WBGFN_notGTAP[, 1])) {
   }
 }
 
-#Create table of aggregated indicators by GTAP Region, na's omitted
-WBGTAP_weighted <- as.data.frame(t(sapply(split(WBGFN_notGTAP, WBGFN_notGTAP$GTAP_Region), function(x) apply(x[, 5:12], 2, weighted.mean, x$Population, na.rm = TRUE))))
-setDT(WBGTAP_weighted, keep.rownames = TRUE)[]
-colnames(WBGTAP_weighted)[1] <- "GTAP_Region"
-GTAP_WBweighted <- cbind(WBGTAP_weighted[,1], year = years, WBGTAP_weighted[,2:length(WBGTAP_weighted)])
+#Create table of aggregated indicat ors by GTAP Region, na's omitted
+WBGTAP_weighted <- as.data.frame(t(sapply(split(WBGFN_notGTAP, list(WBGFN_notGTAP$GTAP_Region, WBGFN_notGTAP$CLUM_category, WBGFN_notGTAP$year)),
+                                          function(x) apply(x[,c(5,7:8)], 2, weighted.mean, x$Population, na.rm = TRUE))))
+
+setDT(WBGTAP_weighted, keep.rownames = TRUE )[]
+colnames(WBGTAP_weighted)[1] <- "REgion_year_CLUM"
+WBGTAP_weighted <- cSplit(WBGTAP_weighted, "REgion_year_CLUM", ".")
+colnames(WBGTAP_weighted)[4] <- "GTAP_Region"
+colnames(WBGTAP_weighted)[5] <- "CLUM_Category"
+colnames(WBGTAP_weighted)[6] <- "year"
+#GTAP_WBweighted <- cbind(WBGTAP_weighted[,1], year = WBGTAP_weighted$year, WBGTAP_weighted[,2:length(WBGTAP_weighted)])
+#GTAP_WBweighted$GTAP_Region <- "ph"; GTAP_WBweighted$year <- 1111; GTAP_WBweighted$CLUM_category <- 'nums' 
+#cbind(c(WBGTAP_weighted$GTAP_Region <- "ph", WBGTAP_weighted$CLUM_category <- 'nums', WBGTAP_weighted$year <- 1111, WBGTAP_weighted))
+
+#x <- strsplit(WBGTAP_weighted$REgion_year_CLUM, ".", fixed = TRUE) 
 
 #Set up GFN-GTAP table for merge
-WBGFN_GTAP <- subset(WBGFN_GTAP, select= c(-X,-iso2c))
+WBGFN_GTAP <- subset(WBGFN_GTAP, select= c(-X.1,-X.2,-country_orCode,-GTAP_Region))
 colnames(WBGFN_GTAP)[1] <- "GTAP_Region"
 
 #Stick 'em together
-GTAP_WBweighted <- rbind(GTAP_WBweighted,WBGFN_GTAP)
+GTAP_WBweighted <- merge(GTAP_WBweighted,WBGFN_GTAP)
+
+
 
 write.csv(GTAP_WBweighted, "WBIndicators_byGTAP.csv")
-
