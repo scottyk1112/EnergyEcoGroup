@@ -159,7 +159,7 @@ Housing_Data <- Housing_Data[!(Housing_Data$country %in% Countries_toDrop$countr
 
 ##Food
 Food_Data$SN.ITK.DFCT <- 1/Food_Data$SN.ITK.DFCT
-Food_Data$EN.FSH.THRD.NO <- 1/Food_Data$EN.FSH.THRD.NO/
+Food_Data$EN.FSH.THRD.NO <- 1/Food_Data$EN.FSH.THRD.NO
 
 ##Government
 Government_Data$GC.DOD.TOTL.GD.ZS <- 1/Government_Data$GC.DOD.TOTL.GD.ZS
@@ -177,7 +177,7 @@ Services_Data$SE.PRM.ENRL.TC.ZS <- 1/Services_Data$SE.PRM.ENRL.TC.ZS
 ##Housing (none)
 
 ##Goods
-GoodsData$ass_pov_extr <- 1/GoodsData$ass_pov_extr
+#GoodsData$ass_pov_extr <- 1/(GoodsData$ass_pov_extr+1)
 
 ##NA Removal Function
 NARemove_Fun <- function(data, NA_factor){
@@ -249,7 +249,7 @@ colnames(GoodsData) <- c("country", "year", "MaxMin_Index")
 GoodsData$MaxMin_Index <- GoodsData$MaxMin_Index/100
 GoodsData$CLUM_category <- "Goods"
 GoodsData$NAPercent <- (rowSums(is.na(GoodsData))/max(rowSums(is.na(GoodsData))))*100
-GoodsData_MaxMin <- GoodsData
+GoodsData_MaxMin <- GoodsData[,c(1:3,6:7)]
 
 ##Binding Data together for single spreadsheet
 MaxMinData <- rbind(FoodData_MaxMin, GovernmentData_MaxMin, ServicesData_MaxMin, 
@@ -294,7 +294,7 @@ HousingData_ZScore <- cbind(HousingData_NoNAs[,c(2, 4:5)], ZScore_Index)
 
 ##For Goods Data, just rename column
 ZScore_Index <- scale(GoodsData$MaxMin_Index)
-GoodsData_ZScore <- cbind(GoodsData[,c(1:2, 4)], ZScore_Index)
+GoodsData_ZScore <- cbind(GoodsData[,c(1:2, 6)], ZScore_Index)
 
 ##Binding Data together for single spreadsheet
 ZScoreData <- rbind(FoodData_ZScore, GovernmentData_ZScore, ServicesData_ZScore, 
