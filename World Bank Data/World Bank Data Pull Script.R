@@ -249,7 +249,7 @@ colnames(GoodsData) <- c("country", "year", "MaxMin_Index")
 GoodsData$MaxMin_Index <- GoodsData$MaxMin_Index/100
 GoodsData$CLUM_category <- "Goods"
 GoodsData$NAPercent <- (rowSums(is.na(GoodsData))/max(rowSums(is.na(GoodsData))))*100
-GoodsData_MaxMin <- GoodsData[,c(1:3,6:7)]
+GoodsData_MaxMin <- GoodsData
 
 ##Binding Data together for single spreadsheet
 MaxMinData <- rbind(FoodData_MaxMin, GovernmentData_MaxMin, ServicesData_MaxMin, 
@@ -294,7 +294,7 @@ HousingData_ZScore <- cbind(HousingData_NoNAs[,c(2, 4:5)], ZScore_Index)
 
 ##For Goods Data, just rename column
 ZScore_Index <- scale(GoodsData$MaxMin_Index)
-GoodsData_ZScore <- cbind(GoodsData[,c(1:2, 6)], ZScore_Index)
+GoodsData_ZScore <- cbind(GoodsData[,c(1:2, 4)], ZScore_Index)
 
 ##Binding Data together for single spreadsheet
 ZScoreData <- rbind(FoodData_ZScore, GovernmentData_ZScore, ServicesData_ZScore, 
