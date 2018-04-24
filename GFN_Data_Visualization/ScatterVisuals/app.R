@@ -10,26 +10,28 @@
 library(shiny)
 library(data.table)
 
-
+#"C:/Users/Eli/GitFolders/EnergyEcoGroup/GFN_Data_Visualization/ScatterVisuals"
 # Reading in the CLUM Data
 #CLUMData <- read.csv("/Users/scottkaplan1112/Box Sync/Graduate School/A_DS421/Spring 2018 Project/EnergyEcoGroup_FinalProject/GFN_Data_Visualization/NFA_2017_CLUM.csv")
+# Path for debugging outside of Shiny
+# CLUMData <- read.csv("C:/Users/Eli/GitFolders/EnergyEcoGroup/GFN_Data_Visualization/ScatterVisuals/NFA_2017_CLUM.csv")
+# CLUMQScore <- read.csv("C:/Users/Eli/GitFolders/EnergyEcoGroup/GFN_Data_Visualization/ScatterVisuals/CLUM_QScore.csv")
+#CLUMData <- read.csv("./GFN_Data_Visualization/ScatterVisuals/NFA_2017_CLUM.csv")
+
 CLUMData <- read.csv("NFA_2017_CLUM.csv")
-CLUMData <- read.csv("./GFN_Data_Visualization/ScatterVisuals/NFA_2017_CLUM.csv")
 CLUMQScore <- read.csv("CLUM_QScore.csv")
 CLUMData$QScore <- CLUMQScore$NFA_GTAP_Qscore[match(CLUMData$GTAP_name,CLUMQScore$GTAP.Only)]
 
-# Path for Eli in debugging outside of Shiny
-# CLUMData <- read.csv("C:/Users/Eli/GitFolders/EnergyEcoGroup/GFN_Data_Visualization/ScatterVisuals/NFA_2017_CLUM.csv")
-# CLUMQScore <- read.csv("C:/Users/Eli/GitFolders/EnergyEcoGroup/GFN_Data_Visualization/ScatterVisuals/CLUM_QScore.csv")
-cols <- c(names(CLUMData[,6:13]))
+cols <- c(names(CLUMData[,6:16]))
 #Log transformed data
 CLUMDatalog <- CLUMData
 CLUMDatalog[cols] <- log(CLUMDatalog[cols])
 
 #Friendly names
-setnames(CLUMData, old = c(names(CLUMData[,6:13])), new = c("Coicop Expenditure", "Crop-Land", 
+setnames(CLUMData, old = c(names(CLUMData[,6:16])), new = c("Coicop Expenditure", "Crop-Land", 
                                                             "Grazing-Land", "Forest-Land", "Fishing-Ground",
-                                                            "BuiltUp-Land", "Carbon", "Total"))
+                                                            "BuiltUp-Land", "Carbon", "Total", "Z-Score", 
+                                                            "Min-Max", "#NA"))
 
 # Define UI for application that draws a Scatterplot
 ui <- pageWithSidebar(
@@ -37,11 +39,11 @@ ui <- pageWithSidebar(
   sidebarPanel(width = 3,
     #selection of GTAP years, 2011 as default
     checkboxGroupInput("Select_years", "Years", unique(CLUMData[,1]), selected = "2011", FALSE),
-    selectInput('xcol', 'X Variable', names(CLUMData[,6:13])),
-    selectInput('ycol', 'Y Variable', names(CLUMData[,6:13]), selected = "Total"),
+    selectInput('xcol', 'X Variable', names(CLUMData[,6:16]), selected = "Min-Max"),
+    selectInput('ycol', 'Y Variable', names(CLUMData[,6:16]), selected = "Total"),
     selectInput('zcol', 'CLUM Category', unique(CLUMData[,5]),
                 selected=names(CLUMData)[[2]]),
-    selectInput('scale', 'Scale', c("normal","log"), selected="log"),
+    selectInput('scale', 'Scale', c("normal","log"), selected="normal"),
     numericInput('clusters', 'Minimum Quality Score', 0,
                  min = 0, max = 6)
   ),
