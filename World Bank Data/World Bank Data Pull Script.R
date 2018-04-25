@@ -306,3 +306,5 @@ ZScoreData <- rbind(FoodData_ZScore, GovernmentData_ZScore, ServicesData_ZScore,
 IndicesData <- left_join(ZScoreData, MaxMinData, by = c("country", "year", "CLUM_category"))
 
 write.csv(IndicesData, "/Users/scottkaplan1112/Box Sync/Graduate School/A_DS421/Spring 2018 Project/EnergyEcoGroup_FinalProject/World Bank Data/IndicesData.csv")
+write.csv(IndicesData, "./GFN_Data_Visualization/ScatterVisuals/IndicesData.csv")
+

@@ -5,8 +5,8 @@ account: lazarus-eli
 server: shinyapps.io
 hostUrl: https://api.shinyapps.io/v1
 appId: 281459
-bundleId: 1335964
+bundleId: 1336051
 url: https://lazarus-eli.shinyapps.io/ScatterVisuals/
-when: 1524583433.85054
+when: 1524585077.61142
 asMultiple: FALSE
 asStatic: FALSE
