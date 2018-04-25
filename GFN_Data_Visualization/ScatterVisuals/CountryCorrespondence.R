@@ -1,11 +1,17 @@
 library(data.table)
 library(dplyr)
-#setwd("./GFN_Data_Visualization/ScatterVisuals")
+library(splitstackshape)
+
+#Eli to-do
+# Get rid of X column in WBData straight away - then update all indexes eg. weighting function
+# GOODS_GTAP need to replace GTAP codes for GTAP Regions, and rename.
+
+
+setwd("./GFN_Data_Visualization/ScatterVisuals")
 
 #read in World Bank Data
 WBData <- read.csv("IndicesData.csv", header=TRUE, colClasses=NA)
 WBData$country <- as.character(WBData$country)
-#Ass_pov <- read.csv("ass_pov_final.csv", header=TRUE, colClasses=NA)
 
 #deal with weird symbol in country name
 WBData$country[grepl("Korea, Dem. Peopl",WBData$country)] <- "Korea, Democratic People's Republic of"
@@ -33,12 +39,6 @@ WB_drop <- c("Arab World", "East Asia & Pacific (excluding high income)",
              "IDA only", "Not classified", "East Asia & Pacific", "Europe & Central Asia", 
              "Sub-Saharan Africa (excluding high income)", "Sub-Saharan Africa", 
              "Latin America & Caribbean", "Middle East & North Africa", "IDA & IBRD total", "North America",
-             "Rest of Oceania", "Rest of East Asia", "Rest of Southeast Asia", 
-             "Rest of South Asia", "Rest of North America", "Rest of South America", "Rest of Central America", 
-             "Caribbean", "Rest of EFTA", "Rest of Eastern Europe", "Rest of Europe", "Rest of Former Soviet Union", 
-             "Rest of Western Asia", "Rest of North Africa", "Rest of Western Africa", "Central Africa", 
-             "South Central Africa", "Rest of Eastern Africa", "Rest of South African Customs Union", 
-             "Rest of the World",
              #plus countries that GFN does not have
              "Monaco", "West Bank and Gaza", "San Marino", "Kosovo",
              #Plus country GFN has but we don't want
@@ -46,11 +46,13 @@ WB_drop <- c("Arab World", "East Asia & Pacific (excluding high income)",
 
 #write.csv(WB_drop, "DropThese.csv")
 
+#Separate Goods bc already in GTAP codes
+GOODS_GTAP <- subset(WBData,WBData[,5]=="Goods")
+WBData <- WBData[!(WBData[,5]=="Goods"),]
+
 #filter to end up with remainders not in GFN or drop
 WB_notGFNlist <- WBData$country[!(WBData$country %in% GFNtoGTAP$GFN_Name)]
 WB_notGFNlist <- WB_notGFNlist[!(WB_notGFNlist %in% WB_drop)]
-#already in GTAP gropuings (from Nat)
-#####WB_notGFNlist <- WB_notGFNlist[!(WB_notGFNlist %in% GFNtoGTAP$GTAP_name)]
 
 #Update spellings to GFN, and then drop from the 'remainder' list
 wb <- "Bahamas, The"; gfn <- "Bahamas" 
@@ -139,7 +141,7 @@ for (i in 1:length(WBData[,1])) {
                                              WBData$country[i] <- WBData$country[i])
   }
 }
-
+#2nd loop for spellings that have 2nd alternate
 for (i in 1:length(WBData[,1])) {
   for (j in 1:length(GFNtoGTAP[,1])) {ifelse(WBData$country[i] == GFNtoGTAP$AltGFN2[j],
                                              WBData$country[i] <- as.character(GFNtoGTAP$GFN_Name[j]),
@@ -188,9 +190,9 @@ for (i in 1:length(WBGFN_notGTAP[, 1])) {
 }
 
 #Create table of aggregated indicat ors by GTAP Region, na's omitted
-WBGTAP_weighted <- as.data.frame(t(sapply(split(WBGFN_notGTAP, list(WBGFN_notGTAP$GTAP_Region, WBGFN_notGTAP$CLUM_category, WBGFN_notGTAP$year)),
-                                          function(x) apply(x[,c(5,7:8)], 2, weighted.mean, x$Population, na.rm = TRUE))))
-
+WBGTAP_weighted <- as.data.frame(t(sapply(split(WBGFN_notGTAP, list(WBGFN_notGTAP$GTAP_Region, 
+                                                                    WBGFN_notGTAP$CLUM_category, WBGFN_notGTAP$year)),
+                                          function(x) apply(x[,c(4,6:7)], 2, weighted.mean, x$Population, na.rm = TRUE))))
 setDT(WBGTAP_weighted, keep.rownames = TRUE )[]
 colnames(WBGTAP_weighted)[1] <- "REgion_year_CLUM"
 WBGTAP_weighted <- cSplit(WBGTAP_weighted, "REgion_year_CLUM", ".")
@@ -204,10 +206,10 @@ colnames(WBGTAP_weighted)[6] <- "year"
 #x <- strsplit(WBGTAP_weighted$REgion_year_CLUM, ".", fixed = TRUE) 
 
 #Set up GFN-GTAP table for merge
-WBGFN_GTAP <- subset(WBGFN_GTAP, select= c(-X.1,-X.2,-country_orCode,-GTAP_Region))
+WBGFN_GTAP <- subset(WBGFN_GTAP, select= -X)
 colnames(WBGFN_GTAP)[1] <- "GTAP_Region"
 
 #Stick 'em together
-GTAP_WBweighted <- rbind(WBGTAP_weighted,WBGFN_GTAP)
+GTAP_WBweighted <- rbind(WBGTAP_weighted,WBGFN_GTAP,GOODS_GTAP)
 
 write.csv(GTAP_WBweighted, "WBIndicators_byGTAP.csv")
