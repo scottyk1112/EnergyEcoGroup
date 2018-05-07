@@ -246,7 +246,7 @@ HousingData_MaxMin <- HousingData_NoNAs[,c(2:6)]
 
 ##For Goods Data, just rename column
 colnames(GoodsData) <- c("country", "year", "MaxMin_Index")
-GoodsData$MaxMin_Index <- GoodsData$MaxMin_Index/100
+GoodsData$MaxMin_Index <- GoodsData$MaxMin_Index/max(GoodsData$MaxMin_Index, na.rm = TRUE)
 GoodsData$CLUM_category <- "Goods"
 GoodsData$NAPercent <- (rowSums(is.na(GoodsData))/max(rowSums(is.na(GoodsData))))*100
 GoodsData_MaxMin <- GoodsData
